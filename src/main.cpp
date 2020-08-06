@@ -24,7 +24,7 @@ uint8_t image_data[11520] = {};
 uint32_t img_index = 0;
 ESP8266WebServer server(80);
 
-void gbClockHit() {
+void ICACHE_RAM_ATTR gbClockHit() {
   if (digitalRead(MOSI) == HIGH) {
     current_data |= 0x01;
   }
@@ -52,7 +52,7 @@ void gbClockHit() {
   }
 }
 
-void processData(uint8_t data) {
+void ICACHE_RAM_ATTR processData(uint8_t data) {
   if (packet_count == 2) { //command type
     current_packet_type = data;
     switch (data) {
@@ -97,7 +97,7 @@ void processData(uint8_t data) {
   }
 }
 
-void storeData(uint8_t *image_data) {
+void ICACHE_RAM_ATTR storeData(uint8_t *image_data) {
   detachInterrupt(14);
   // Serial.println("Storing...");
 
@@ -180,7 +180,7 @@ void handleImgList() {
   server.send(200, "text/json", output);
 }
 
-uint32_t getImageCount() {
+uint32_t ICACHE_RAM_ATTR getImageCount() {
   Dir dir = SPIFFS.openDir("/img/");
   uint32_t result = 0;
   while(dir.next()) {
@@ -197,7 +197,7 @@ void removeAllImages() {
   server.send(200, "text/json", "true");
 }
 
-void resetAllCounters() {
+void ICACHE_RAM_ATTR resetAllCounters() {
   Serial.println("Resetting All Counters...");
   clock_count = 0x00;
   current_data = 0x00;
